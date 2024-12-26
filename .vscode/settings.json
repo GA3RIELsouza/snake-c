@@ -8,7 +8,6 @@
         "coordinates.h": "c",
         "windows.h": "c",
         "consts.h": "c",
-        "food.h": "c",
-        "scoreboard.h": "c"
+        "food.h": "c"
     }
 }

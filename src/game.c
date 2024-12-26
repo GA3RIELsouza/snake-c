@@ -123,22 +123,28 @@ void *checkKeysPressed() {
 
 void defeat() {
 	system("cls");
-    printf("You lose!\n");
+	system("color 04");
+    printf("You lose!\n\nYour length: %d\n\n", snake.length);
 
 	Beep(250, 400);
 	Beep(200, 500);
 	Beep(150, 1000);
+
+	system("pause");
 
     exit(0);
 }
 
 void victory() {
 	system("cls");
-    printf("You win!\n");
+	system("color 0a");
+    printf("You win!\n\nYour length: %d (the whole map!)\n\n", snake.length);
 
 	Beep(300, 300);
 	Beep(400, 200);
 	Beep(500, 1000);
+
+	system("pause");
 
     exit(0);
 }

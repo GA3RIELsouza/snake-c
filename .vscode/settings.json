@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "body.h": "c",
+        "stdio.h": "c",
+        "snake.h": "c",
+        "direction.h": "c",
+        "coordinates.h": "c",
+        "windows.h": "c",
+        "consts.h": "c",
+        "food.h": "c"
+    }
+}

@@ -10,8 +10,7 @@ int main() {
     lastDirection = RIGHT;
 
     Coordinates startingCoordinates;
-    startingCoordinates.x = 0;
-    startingCoordinates.y = 0;
+	initCoordinates(&startingCoordinates, 0, 0);
 
     initSnake(&snake, startingCoordinates);
 	randomizeFood(&food);
@@ -25,11 +24,7 @@ int gameLoop() {
 
 	renderMap();
 
-	bool snakeIsBitingItself = false;
-
-	if (snake.length >= 5) {
-		snakeIsBitingItself = isBodyInCoordinates(snake.head.son, snake.head.coordinates);
-	}
+	bool snakeIsBitingItself = (snake.length >= 5) && isBodyInCoordinates(snake.head.son, snake.head.coordinates);
 
 	if (snakeIsBitingItself) {
 		return defeat();
@@ -55,19 +50,19 @@ int gameLoop() {
 
 	Sleep(millisBetweenMovements - movementSoundMillis);
 	system("cls");
-	return gameLoop();
+	gameLoop();
 }
 
 void renderMap() {
-	Coordinates coordinates;
+	Coordinates currentCoordinates;
 
     for (int x = 0; x < mapLength; x++) {
         for (int y = 0; y < mapLength; y++) {
-			initCoordinates(&coordinates, x, y);
+			initCoordinates(&currentCoordinates, x, y);
 
-			if (isBodyInCoordinates(&(snake.head), coordinates)) {
+			if (isBodyInCoordinates(&(snake.head), currentCoordinates)) {
 				printf("O ");
-			} else if (isFoodInCoordinates(&food, coordinates)) {
+			} else if (isFoodInCoordinates(&food, currentCoordinates)) {
 				printf("x ");
 			} else {
 				printf(". ");
@@ -75,6 +70,8 @@ void renderMap() {
         }
         printf("\n");
     }
+
+	printf("Length: %d", snake.length);
 }
 
 Direction checkKeyPressed() {

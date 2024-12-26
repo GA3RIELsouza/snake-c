@@ -8,7 +8,7 @@ typedef struct {
     short int y;
 } Coordinates;
 
-void initCoordinates(Coordinates* coordinates, short int x, short int y);
+void initCoordinates(Coordinates *coordinates, short int x, short int y);
 
 bool compareCoordinates(Coordinates coordinate1, Coordinates coordinate2);
 

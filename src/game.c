@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
+#include <pthread.h>
 
 #include "../include/coordinates.h"
 #include "../include/game.h"
@@ -7,6 +8,11 @@
 #include "../include/food.h"
 
 int main() {
+	system("title Snake");
+	system("color 0f");
+
+	srand(time(NULL));
+
     lastDirection = RIGHT;
 
     Coordinates startingCoordinates;
@@ -15,86 +21,107 @@ int main() {
     initSnake(&snake, startingCoordinates);
 	randomizeFood(&food);
 
-    return gameLoop();
+	pthread_t keysThread;
+	pthread_create(&keysThread, NULL, checkKeysPressed, NULL);
+
+    gameLoop();
 }
 
-int gameLoop() {
-	lastDirection = checkKeyPressed();
+void gameLoop() {
 	moveSnake(&snake, lastDirection);
 
-	renderMap();
-
-	bool snakeIsBitingItself = (snake.length >= 5) && isBodyInCoordinates(snake.head.son, snake.head.coordinates);
+	bool snakeIsBitingItself = (snake.length >= 5)
+		&& isBodyInCoordinates(snake.head.son, snake.head.coordinates);
 
 	if (snakeIsBitingItself) {
-		return defeat();
+		defeat();
+	} else if (snake.length == mapLength * mapLength) {
+		victory();
 	}
 
+	pthread_t mapThread;
+	pthread_create(&mapThread, NULL, renderMap, NULL);
+
 	bool snakeIsEatingFood = isFoodInCoordinates(&food, snake.head.coordinates);
+
+	pthread_t beepThread;
 
 	if (snakeIsEatingFood) {
 		growSnake(&snake);
 
-		Beep(500, movementSoundMillis);
+		pthread_create(&beepThread, NULL, beep, (void *)&eatingFoodFrequency);
 
-		do {
-			randomizeFood(&food);
-		} while (isBodyInCoordinates(&(snake.head), food.coordinates));
+		for (int i = 0; isBodyInCoordinates(&(snake.head), food.coordinates); i++) {
+			if (i % 5 == 0) {
+				moveFood(&food, getTail(&(snake.head))->coordinates);
+			} else {
+				randomizeFood(&food);
+			}
+		}
 	} else {
-		Beep(400, movementSoundMillis);
+		pthread_create(&beepThread, NULL, beep, (void *)&normalMovementFrequency);
 	}
 
-	if (snake.length == mapLength * mapLength) {
-		return victory();
-	}
+	Sleep(millisBetweenMovements);
 
-	Sleep(millisBetweenMovements - movementSoundMillis);
-	system("cls");
+	pthread_join(mapThread, NULL);
+	pthread_join(beepThread, NULL);
+
 	gameLoop();
 }
 
-void renderMap() {
+void *renderMap() {
 	Coordinates currentCoordinates;
 
+	system("cls");
     for (int x = 0; x < mapLength; x++) {
         for (int y = 0; y < mapLength; y++) {
 			initCoordinates(&currentCoordinates, x, y);
 
-			if (isBodyInCoordinates(&(snake.head), currentCoordinates)) {
+			if (compareCoordinates(snake.head.coordinates, currentCoordinates)) {
 				printf("O ");
+			} else if (isBodyInCoordinates(&(snake.head), currentCoordinates)) {
+				printf("o ");
 			} else if (isFoodInCoordinates(&food, currentCoordinates)) {
 				printf("x ");
 			} else {
 				printf(". ");
 			}
         }
-        printf("\n");
+		printf("\n");
     }
 
-	printf("Length: %d", snake.length);
+	printf("\nLength: %d", snake.length);
 }
 
-Direction checkKeyPressed() {
+void *beep(void *frequencyPointer) {
+	int *frequency = (int *)frequencyPointer;
+
+	Beep(*frequency, movementSoundMillis);
+}
+
+void *checkKeysPressed() {
 	if ((GetAsyncKeyState(VK_UP) & 0x8000) && lastDirection != DOWN) {
-		return UP;
+		lastDirection = UP;
 	}
 
 	if ((GetAsyncKeyState(VK_DOWN) & 0x8000) && lastDirection != UP) {
-		return DOWN;
+		lastDirection = DOWN;
 	}
 
 	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) && lastDirection != RIGHT) {
-		return LEFT;
+		lastDirection = LEFT;
 	}
 
 	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) && lastDirection != LEFT) {
-		return RIGHT;
+		lastDirection = RIGHT;
 	}
 
-	return lastDirection;
+	Sleep(10);
+	checkKeysPressed();
 }
 
-int defeat() {
+void defeat() {
 	system("cls");
     printf("You lose!\n");
 
@@ -102,10 +129,10 @@ int defeat() {
 	Beep(200, 500);
 	Beep(150, 1000);
 
-    return 1;
+    exit(0);
 }
 
-int victory() {
+void victory() {
 	system("cls");
     printf("You win!\n");
 
@@ -113,5 +140,5 @@ int victory() {
 	Beep(400, 200);
 	Beep(500, 1000);
 
-    return 0;
+    exit(0);
 }

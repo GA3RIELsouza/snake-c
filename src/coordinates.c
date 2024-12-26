@@ -1,6 +1,6 @@
 #include "../include/coordinates.h"
 
-void initCoordinates(Coordinates* coordinates, short int x, short int y) {
+void initCoordinates(Coordinates *coordinates, short int x, short int y) {
     coordinates->x = x;
     coordinates->y = y;
 }

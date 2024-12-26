@@ -5,20 +5,27 @@
 #include "snake.h"
 #include "direction.h"
 
+const int normalMovementFrequency = 400;
+const int eatingFoodFrequency = 500;
+
 Food food;
 Snake snake;
 Direction lastDirection;
 
 int main();
 
-int gameLoop();
+void gameLoop();
 
-void renderMap();
+void *renderMap();
 
-Direction checkKeyPressed();
+void *beep(void *frequencyPointer);
 
-int defeat();
+void *logicRandomizeFood();
 
-int victory();
+void *checkKeysPressed();
+
+void defeat();
+
+void victory();
 
 #endif

@@ -8,15 +8,17 @@
 typedef struct Body {
     Coordinates coordinates;
     Coordinates oldCoordinates;
-    struct Body* son;
+    struct Body *son;
 } Body;
 
-void initBody(Body* body, Coordinates coordinates);
+void initBody(Body *body, Coordinates coordinates);
 
-void moveBody(Body* body, Coordinates coordinates);
+void moveBody(Body *body, Coordinates coordinates);
 
-bool isBodyInCoordinates(Body* body, Coordinates coordinates);
+bool isBodyInCoordinates(Body *body, Coordinates coordinates);
 
-void growBody(Body* body);
+void growBody(Body *body);
+
+Body *getTail(Body *body);
 
 #endif

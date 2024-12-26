@@ -3,12 +3,12 @@
 
 #include "../include/body.h"
 
-void initBody(Body* body, Coordinates coordinates) {
+void initBody(Body *body, Coordinates coordinates) {
     body->coordinates = coordinates;
     body->son = NULL;
 }
 
-void moveBody(Body* body, Coordinates coordinates) {
+void moveBody(Body *body, Coordinates coordinates) {
     body->oldCoordinates = body->coordinates;
     body->coordinates = coordinates;
 
@@ -17,7 +17,7 @@ void moveBody(Body* body, Coordinates coordinates) {
     }
 }
 
-bool isBodyInCoordinates(Body* body, Coordinates coordinates) {
+bool isBodyInCoordinates(Body *body, Coordinates coordinates) {
     if (compareCoordinates(body->coordinates, coordinates)) {
         return true;
     }
@@ -29,11 +29,19 @@ bool isBodyInCoordinates(Body* body, Coordinates coordinates) {
     return false;
 }
 
-void growBody(Body* body) {
+void growBody(Body *body) {
     if (body->son == NULL) {
         body->son = (Body*)malloc(sizeof(Body));
         initBody(body->son, body->coordinates);
     } else {
         growBody(body->son);
     }
+}
+
+Body *getTail(Body *body) {
+    if (body->son != NULL) {
+        getTail(body->son);
+    }
+
+    return body;
 }

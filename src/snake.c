@@ -1,12 +1,12 @@
 #include "../include/snake.h"
 #include "../include/consts.h"
 
-void initSnake(Snake* snake, Coordinates coordinates) {
+void initSnake(Snake *snake, Coordinates coordinates) {
     initBody(&(snake->head), coordinates);
     snake->length = 1;
 }
 
-void moveSnake(Snake* snake, Direction direction) {
+void moveSnake(Snake *snake, Direction direction) {
     Coordinates newCoordinates = snake->head.coordinates;
 
     switch (direction) {
@@ -46,7 +46,7 @@ void moveSnake(Snake* snake, Direction direction) {
     moveBody(&(snake->head), newCoordinates);
 }
 
-void growSnake(Snake* snake) {
+void growSnake(Snake *snake) {
     growBody(&(snake->head));
     snake->length = snake->length + 1;
 }

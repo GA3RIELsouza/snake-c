@@ -3,44 +3,44 @@
 
 #include "../include/body.h"
 
-void initBody(Body *body, Coordinates coordinates) {
+void init_body(Body *body, Coordinates coordinates) {
     body->coordinates = coordinates;
     body->son = NULL;
 }
 
-void moveBody(Body *body, Coordinates coordinates) {
+void move_body(Body *body, Coordinates coordinates) {
     body->oldCoordinates = body->coordinates;
     body->coordinates = coordinates;
 
     if (body->son != NULL) {
-        moveBody(body->son, body->oldCoordinates);
+        move_body(body->son, body->oldCoordinates);
     }
 }
 
-bool isBodyInCoordinates(Body *body, Coordinates coordinates) {
-    if (compareCoordinates(body->coordinates, coordinates)) {
+bool is_body_in_coordinates(Body *body, Coordinates coordinates) {
+    if (compare_coordinates(body->coordinates, coordinates)) {
         return true;
     }
 
     if (body->son != NULL) {
-        return isBodyInCoordinates(body->son, coordinates);
+        return is_body_in_coordinates(body->son, coordinates);
     }
 
     return false;
 }
 
-void growBody(Body *body) {
+void grow_body(Body *body) {
     if (body->son == NULL) {
         body->son = (Body*)malloc(sizeof(Body));
-        initBody(body->son, body->coordinates);
+        init_body(body->son, body->coordinates);
     } else {
-        growBody(body->son);
+        grow_body(body->son);
     }
 }
 
-Body *getTail(Body *body) {
+Body *get_tail(Body *body) {
     if (body->son != NULL) {
-        getTail(body->son);
+        get_tail(body->son);
     }
 
     return body;

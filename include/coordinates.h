@@ -8,8 +8,8 @@ typedef struct {
     short int y;
 } Coordinates;
 
-void initCoordinates(Coordinates *coordinates, short int x, short int y);
+void init_coordinates(Coordinates *coordinates, short int x, short int y);
 
-bool compareCoordinates(Coordinates coordinate1, Coordinates coordinate2);
+bool compare_coordinates(Coordinates coordinate1, Coordinates coordinate2);
 
 #endif

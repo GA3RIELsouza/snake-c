@@ -11,10 +11,10 @@ typedef struct {
     Coordinates coordinates;
 } Food;
 
-void randomizeFood(Food *food);
+void randomize_food_coordinates(Food *food);
 
-bool isFoodInCoordinates(Food *food, Coordinates coordinates);
+bool is_food_in_coordinates(Food *food, Coordinates coordinates);
 
-void moveFood(Food *food, Coordinates coordinates);
+void move_food(Food *food, Coordinates coordinates);
 
 #endif

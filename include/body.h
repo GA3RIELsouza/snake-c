@@ -9,14 +9,14 @@ typedef struct Body {
     struct Body *son;
 } Body;
 
-void initBody(Body *body, Coordinates coordinates);
+void init_body(Body *body, Coordinates coordinates);
 
-void moveBody(Body *body, Coordinates coordinates);
+void move_body(Body *body, Coordinates coordinates);
 
-bool isBodyInCoordinates(Body *body, Coordinates coordinates);
+bool is_body_in_coordinates(Body *body, Coordinates coordinates);
 
-void growBody(Body *body);
+void grow_body(Body *body);
 
-Body *getTail(Body *body);
+Body *get_tail(Body *body);
 
 #endif

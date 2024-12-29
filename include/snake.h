@@ -9,10 +9,10 @@ typedef struct {
     short int length;
 } Snake;
 
-void initSnake(Snake *snake, Coordinates coordinates);
+void init_snake(Snake *snake, Coordinates coordinates);
 
-void moveSnake(Snake *snake, Direction direction);
+void move_snake(Snake *snake, Direction direction);
 
-void growSnake(Snake *snake);
+void grow_snake(Snake *snake);
 
 #endif

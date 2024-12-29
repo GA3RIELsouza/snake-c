@@ -1,5 +1,5 @@
 #include "../include/consts.h"
 
-const short int mapLength = 10;
-const short int millisBetweenMovements = 500;
-const short int movementSoundMillis = 100;
+const short int map_length = 10;
+const short int millis_between_movements = 500;
+const short int movement_beep_millis = 100;

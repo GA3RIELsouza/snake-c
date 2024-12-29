@@ -7,27 +7,26 @@
 #include "snake.h"
 #include "direction.h"
 
-const int normalMovementFrequency = 400;
-const int eatingFoodFrequency = 500;
+const int normal_movement_beep_frequency = 400;
+const int eating_food_beep_frequency = 500;
 
 Food food;
 Snake snake;
-Direction lastDirection;
+Direction snake_direction;
+Direction last_snake_direction;
 
-int main();
+int main(int argc, char **argv);
 
-void gameLoop();
+void game_loop(HANDLE *keys_thread);
 
-DWORD WINAPI renderMap(LPVOID lpParam);
+DWORD WINAPI render_map(LPVOID lpParam);
 
 DWORD WINAPI beep(LPVOID lpFrequency);
 
-void *logicRandomizeFood();
+DWORD WINAPI check_keys_pressed(LPVOID lpParam);
 
-DWORD WINAPI checkKeysPressed(LPVOID lpParam);
+void defeat(HANDLE *keys_thread);
 
-void defeat();
-
-void victory();
+void victory(HANDLE *keys_thread);
 
 #endif

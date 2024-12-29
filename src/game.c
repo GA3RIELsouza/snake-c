@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <windows.h>
-#include <pthread.h>
 
 #include "../include/coordinates.h"
 #include "../include/game.h"
@@ -21,8 +19,7 @@ int main() {
     initSnake(&snake, startingCoordinates);
 	randomizeFood(&food);
 
-	pthread_t keysThread;
-	pthread_create(&keysThread, NULL, checkKeysPressed, NULL);
+	HANDLE keysThread = CreateThread(NULL, 0, checkKeysPressed, NULL, 0, NULL);
 
     gameLoop();
 }
@@ -39,17 +36,16 @@ void gameLoop() {
 		victory();
 	}
 
-	pthread_t mapThread;
-	pthread_create(&mapThread, NULL, renderMap, NULL);
+	HANDLE mapThread = CreateThread(NULL, 0, renderMap, NULL, 0, NULL);
 
 	bool snakeIsEatingFood = isFoodInCoordinates(&food, snake.head.coordinates);
 
-	pthread_t beepThread;
+	HANDLE beepThread;
 
 	if (snakeIsEatingFood) {
 		growSnake(&snake);
 
-		pthread_create(&beepThread, NULL, beep, (void *)&eatingFoodFrequency);
+		beepThread = CreateThread(NULL, 0, beep, (LPVOID)&eatingFoodFrequency, 0, NULL);
 
 		for (int i = 0; isBodyInCoordinates(&(snake.head), food.coordinates); i++) {
 			if (i % 5 == 0) {
@@ -59,18 +55,21 @@ void gameLoop() {
 			}
 		}
 	} else {
-		pthread_create(&beepThread, NULL, beep, (void *)&normalMovementFrequency);
+		beepThread = CreateThread(NULL, 0, beep, (LPVOID)&normalMovementFrequency, 0, NULL);
 	}
 
 	Sleep(millisBetweenMovements);
 
-	pthread_join(mapThread, NULL);
-	pthread_join(beepThread, NULL);
+	WaitForSingleObject(mapThread, INFINITE);
+    WaitForSingleObject(beepThread, INFINITE);
+
+    CloseHandle(mapThread);
+    CloseHandle(beepThread);
 
 	gameLoop();
 }
 
-void *renderMap() {
+DWORD WINAPI renderMap(LPVOID lpParam) {
 	Coordinates currentCoordinates;
 
 	system("cls");
@@ -94,13 +93,13 @@ void *renderMap() {
 	printf("\nLength: %d", snake.length);
 }
 
-void *beep(void *frequencyPointer) {
-	int *frequency = (int *)frequencyPointer;
+DWORD WINAPI beep(LPVOID lpFrequency) {
+	int *frequency = (int *)lpFrequency;
 
 	Beep(*frequency, movementSoundMillis);
 }
 
-void *checkKeysPressed() {
+DWORD WINAPI checkKeysPressed(LPVOID lpParam) {
 	if ((GetAsyncKeyState(VK_UP) & 0x8000) && lastDirection != DOWN) {
 		lastDirection = UP;
 	}
@@ -118,7 +117,7 @@ void *checkKeysPressed() {
 	}
 
 	Sleep(10);
-	checkKeysPressed();
+	checkKeysPressed(NULL);
 }
 
 void defeat() {

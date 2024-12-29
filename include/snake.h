@@ -1,8 +1,6 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
-#include <stdbool.h>
-
 #include "body.h"
 #include "direction.h"
 

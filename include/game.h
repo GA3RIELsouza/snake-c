@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <windows.h>
+
 #include "food.h"
 #include "snake.h"
 #include "direction.h"
@@ -16,13 +18,13 @@ int main();
 
 void gameLoop();
 
-void *renderMap();
+DWORD WINAPI renderMap(LPVOID lpParam);
 
-void *beep(void *frequencyPointer);
+DWORD WINAPI beep(LPVOID lpFrequency);
 
 void *logicRandomizeFood();
 
-void *checkKeysPressed();
+DWORD WINAPI checkKeysPressed(LPVOID lpParam);
 
 void defeat();
 
